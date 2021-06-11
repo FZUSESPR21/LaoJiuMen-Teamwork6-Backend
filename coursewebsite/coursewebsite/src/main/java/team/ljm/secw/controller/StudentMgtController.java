@@ -31,12 +31,15 @@ public class StudentMgtController {
     @Autowired
     IClazzService clazzService;
 
+
+    @RequiresRoles("teacher")
     @RequestMapping(value = "/teacher/stu_mgt/excel")
     @ResponseBody
     public ResponseVO doExcel(@ModelAttribute StudentExcelDTO studentExcelDTO) {
         return studentMgtService.readExcelFile(studentExcelDTO);
     }
 
+    @RequiresRoles("teacher")
     @RequestMapping(value = "/teacher/stu_mgt/down")
     //@ResponseBody
     public void download(HttpServletRequest request, HttpServletResponse response) {

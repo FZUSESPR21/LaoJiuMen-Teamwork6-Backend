@@ -36,7 +36,7 @@ public class ResourceController {
     private IResourceService resourceService;
 
     //所有资源，教师，上传,注意:由于文件存放路径是由教师id，班级id，构成，若同老师上传同名文件至同一个班级将造成覆盖
-    //@RequiresRoles("teacher")
+    @RequiresRoles("teacher")
     @RequestMapping("/teacher/resource/upload")
     @ResponseBody
     public ResponseVO upload(@ModelAttribute ResourceDTO requestResource, HttpServletRequest request, Model model) {
@@ -75,7 +75,7 @@ public class ResourceController {
     }
 
     //学习计划，教师，更新
-    //@RequiresRoles("teacher")
+    @RequiresRoles("teacher")
     @RequestMapping("/teacher/resource/update_other")
     @ResponseBody
     public ResponseVO submitOther(@ModelAttribute ResourceDTO requestResource, HttpServletRequest request, Model model) {
@@ -201,7 +201,7 @@ public class ResourceController {
     }
 
     //所有资源，下载
-    //@RequiresRoles(value={"student","teacher"}, logical = Logical.OR)
+    @RequiresRoles(value={"student","teacher"}, logical = Logical.OR)
     @RequestMapping(value = "/resource/download")
     public void download(HttpServletRequest request, HttpServletResponse response ,@RequestParam("id") int id){
         try {

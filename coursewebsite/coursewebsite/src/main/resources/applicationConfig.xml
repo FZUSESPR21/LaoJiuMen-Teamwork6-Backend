@@ -147,15 +147,15 @@
                 /logout = logout
                 /captcha = anon
                 /chg_pwd = anon
-                /teacher/stu_mgt/down = anon
-                /teacher/stu_mgt/excel = anon
-                /teacher/score/down = anon
-                /teacher/score/excel = anon
-                /teacher/resource/upload = anon
-                /teacher/resource/update_other = anon
-                /resource/download = anon
-                /student/homework_result/submit = anon
-                /homework_result/download = anon
+<!--                /teacher/stu_mgt/down = anon-->
+<!--                /teacher/stu_mgt/excel = anon-->
+<!--                /teacher/score/down = anon-->
+<!--                /teacher/score/excel = anon-->
+<!--                /teacher/resource/upload = anon-->
+<!--                /teacher/resource/update_other = anon-->
+<!--                /resource/download = anon-->
+<!--                /student/homework_result/submit = anon-->
+<!--                /homework_result/download = anon-->
 
 <!--                /pages/login.jsp=anon-->
                 /**/*.jsp=anon

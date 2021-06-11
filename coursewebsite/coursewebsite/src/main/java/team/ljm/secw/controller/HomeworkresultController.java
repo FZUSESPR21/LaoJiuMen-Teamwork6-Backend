@@ -122,7 +122,7 @@ public class HomeworkresultController {
     }
 
     //学生提交作业（包括更新）
-    //@RequiresRoles("student")
+    @RequiresRoles("student")
     @RequestMapping("/student/homework_result/submit")
     @ResponseBody
     public ResponseVO submit(@ModelAttribute HomeworkResultDTO requestHomeworkResult, HttpServletRequest request, Model model) {
@@ -195,7 +195,7 @@ public class HomeworkresultController {
     }
 
     //下载附件
-    //@RequiresRoles(value={"student","teacher"}, logical = Logical.OR)
+    @RequiresRoles(value={"student","teacher"}, logical = Logical.OR)
     @RequestMapping(value = "/homework_result/download")
     public void download(HttpServletRequest request, HttpServletResponse response , @RequestParam("id") int id){
         try {
