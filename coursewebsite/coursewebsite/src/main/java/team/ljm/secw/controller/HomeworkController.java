@@ -92,6 +92,10 @@ public class HomeworkController {
     @RequestMapping("/teacher/homework/add")
     @ResponseBody
     public ResponseVO addHomework(@RequestBody Homework requestHomework){
+        if (requestHomework.getTitle().length()>30)return new ResponseVO("200","标题过长");
+        if (requestHomework.getContent().length()>1000)return new ResponseVO("200","内容过长");
+        if (requestHomework.getTitle().isEmpty())return new ResponseVO("200","标题不能为空");
+        if (requestHomework.getContent().isEmpty())return new ResponseVO("200","内容不能为空");
         homeworkService.add(requestHomework);
         requestHomework.setId(requestHomework.getId());
         List<Student> list = homeworkService.findStudentListByClazzId(requestHomework.getClazzId());
@@ -110,6 +114,10 @@ public class HomeworkController {
     @RequestMapping("/teacher/homework/update")
     @ResponseBody
     public ResponseVO updateHomework(@RequestBody Homework requestHomework){
+        if (requestHomework.getTitle().length()>30)return new ResponseVO("200","标题过长");
+        if (requestHomework.getContent().length()>1000)return new ResponseVO("200","内容过长");
+        if (requestHomework.getTitle().isEmpty())return new ResponseVO("200","标题不能为空");
+        if (requestHomework.getContent().isEmpty())return new ResponseVO("200","内容不能为空");
         homeworkService.modify(requestHomework);
         return new ResponseVO("200","success");
     }
@@ -165,7 +173,6 @@ public class HomeworkController {
                 homeworkInfoDTO.setContent(homework.getContent());
                 homeworkInfoDTO.setId(homework.getId());
                 homeworkResult.setHomeworkId(homework.getId());
-                //System.out.println(homeworkResultService.findResultStatus(homeworkResult));
                 Integer score = homeworkResultService.findResultStatus(homeworkResult);
                 if (score == null)score = -2;
                 homeworkInfoDTO.setScore(score);
