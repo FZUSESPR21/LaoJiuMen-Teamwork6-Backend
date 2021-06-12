@@ -99,7 +99,8 @@ public class HomeworkresultController {
     @RequestMapping("/teacher/homework_result/update")
     @ResponseBody
     public ResponseVO update(@RequestBody HomeworkResult requestHomeworkResult){
-        int id = requestHomeworkResult.getId();
+        //int id = requestHomeworkResult.getId();
+        if (requestHomeworkResult.getRemark().length()>255)return new ResponseVO("200","评语文字过长");
         homeworkResultService.correct(requestHomeworkResult);
         return new ResponseVO("200","success");
     }
@@ -126,6 +127,7 @@ public class HomeworkresultController {
     @RequestMapping("/student/homework_result/submit")
     @ResponseBody
     public ResponseVO submit(@ModelAttribute HomeworkResultDTO requestHomeworkResult, HttpServletRequest request, Model model) {
+        if (requestHomeworkResult.getContent().length()>1000)return new ResponseVO("200","内容长度超出，请上传文件");
         MultipartFile file = requestHomeworkResult.getFile();
         if (file != null) {
             //将附件储存
