@@ -18,43 +18,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Controller
 public class ChangePwdController {
+
+    private static Map<String, String> captchaMap = new HashMap<>();
 
     @Autowired
     IChangePwdService changePwdService;
 
     @RequestMapping(value = "/captcha", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseVO sendCaptchaEmail(@RequestBody VerificationDTO verificationDTO, HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    public ResponseVO sendCaptchaEmail(@RequestBody VerificationDTO verificationDTO) {
         String captcha = String.valueOf(new Random().nextInt(899999) + 100000);
         if ("0".equals(verificationDTO.getType())) {
             String email = changePwdService.findStudentEmailByAccount(verificationDTO.getAccount());
-            return getResponseVO(verificationDTO, session, captcha, email);
+            return getResponseVO(verificationDTO, captcha, email);
         } else if("1".equals(verificationDTO.getType())){
             String email = changePwdService.findTeacherEmailByAccount(verificationDTO.getAccount());
-            return getResponseVO(verificationDTO, session, captcha, email);
+            return getResponseVO(verificationDTO, captcha, email);
         } else {
             return new ResponseVO("401", "错误");
         }
     }
 
-    private ResponseVO getResponseVO(VerificationDTO verificationDTO, HttpSession session, String captcha, String email) {
+    private ResponseVO getResponseVO(VerificationDTO verificationDTO, String captcha, String email) {
         if (email != null && email.equals(verificationDTO.getEmail())) {
             SendMailUtil.sendMail(email, captcha);
-            session.setAttribute("account", verificationDTO.getAccount());
-            session.setAttribute("email", verificationDTO.getEmail());
-            session.setAttribute("captcha", captcha);
-            String account1 = (String) session.getAttribute("account");
-            String email1 = (String) session.getAttribute("email");
-            String captcha1 = (String) session.getAttribute("captcha");
-            System.out.println("1:"+account1);
-            System.out.println("1:"+email1);
-            System.out.println("1:"+captcha1);
-            return new ResponseVO("200", "验证码已发送", captcha);
+            captchaMap.put(verificationDTO.getAccount(), captcha);
+            for (Map.Entry<String, String> entry : captchaMap.entrySet()) {
+                System.out.println("key = " + entry.getKey() + ", value = " + entry.getValue());
+            }
+            return new ResponseVO("200", "验证码已发送");
         } else {
             return new ResponseVO("401", "账号或邮箱错误");
         }
@@ -63,37 +61,29 @@ public class ChangePwdController {
     @RequestMapping(value = "/chg_pwd", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO changePassword(@RequestBody VerificationDTO verificationDTO, HttpServletRequest request) {
-//        System.out.println(verificationDTO);
-//        System.out.println("cp2:"+request.getSession().getId());
-//        HttpSession session = request.getSession();
-        //System.out.println("cp1:"+session.getId());
-//        String account = (String) session.getAttribute("account");
-//        String email = (String) session.getAttribute("email");
-//        String captcha = (String) session.getAttribute("captcha");
-//        System.out.println(account);
-//        System.out.println(email);
-//        System.out.println(captcha);
 
-//        if (account.equals(verificationDTO.getAccount()) && email.equals(verificationDTO.getEmail())) {
-//            if (captcha.equals(verificationDTO.getCaptcha())) {
-//                session.removeAttribute("account");
-//                session.removeAttribute("email");
-//                session.removeAttribute("captcha");
-//                return new ResponseVO("200", "修改密码成功");
-//            } else {
-//                return new ResponseVO("401", "验证码错误");
-//            }
-//        } else {
-//            return new ResponseVO("401", "账号或邮箱错误");
-//        }
-        if (verificationDTO.getType().equals("0")) {
-            changePwdService.modifyStudentPassword(verificationDTO);
-            return new ResponseVO("200", "修改密码成功");
-        } else if (verificationDTO.getType().equals("1")) {
-            changePwdService.modifyTeacherPassword(verificationDTO);
-            return new ResponseVO("200", "修改密码成功");
+        if (captchaMap.get(verificationDTO.getAccount()).equals(verificationDTO.getCaptcha())) {
+            if (verificationDTO.getType().equals("0")) {
+                String email = changePwdService.findStudentEmailByAccount(verificationDTO.getAccount());
+                if (email != null && email.equals(verificationDTO.getEmail())) {
+                    changePwdService.modifyStudentPassword(verificationDTO);
+                    return new ResponseVO("200", "修改密码成功");
+                } else {
+                    return new ResponseVO("401", "账号或邮箱错误");
+                }
+            } else if (verificationDTO.getType().equals("1")) {
+                String email = changePwdService.findTeacherEmailByAccount(verificationDTO.getAccount());
+                if (email != null && email.equals(verificationDTO.getEmail())) {
+                    changePwdService.modifyTeacherPassword(verificationDTO);
+                    return new ResponseVO("200", "修改密码成功");
+                } else {
+                    return new ResponseVO("401", "账号或邮箱错误");
+                }
+            } else {
+                return new ResponseVO("500", "服务器错误");
+            }
         } else {
-            return new ResponseVO("401", "错误");
+            return new ResponseVO("401", "验证码错误");
         }
     }
 
