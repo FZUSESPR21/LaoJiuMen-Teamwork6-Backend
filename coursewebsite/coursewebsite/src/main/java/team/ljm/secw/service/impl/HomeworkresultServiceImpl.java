@@ -9,6 +9,9 @@ import team.ljm.secw.entity.Student;
 import team.ljm.secw.mapper.HomeworkresultMapper;
 import team.ljm.secw.service.IHomeworkresultService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service("HomeworkresultService")
@@ -89,8 +92,19 @@ public class HomeworkresultServiceImpl implements IHomeworkresultService {
 
     @Override
     public int remove(HomeworkResult homeworkResult) {
+        homeworkResult = homeworkresultMapper.selectById(homeworkResult.getId());
+        String url = homeworkResult.getFilePath();
+        if (!url.isEmpty()){
+            Path path = Paths.get(url);
+            try {
+                //删除原附件
+                Files.delete(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }}
         return homeworkresultMapper.delete(homeworkResult.getId());
     }
+
 
 
 }

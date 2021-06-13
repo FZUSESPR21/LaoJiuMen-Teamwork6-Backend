@@ -3,10 +3,15 @@ package team.ljm.secw.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.ljm.secw.entity.Homework;
+import team.ljm.secw.entity.HomeworkResult;
 import team.ljm.secw.entity.Student;
 import team.ljm.secw.mapper.HomeworkMapper;
+import team.ljm.secw.mapper.HomeworkresultMapper;
 import team.ljm.secw.service.IHomeworkService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service("HomeworkService")
@@ -14,6 +19,9 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
     @Autowired
     private HomeworkMapper homeworkMapper;
+
+    @Autowired
+    private HomeworkresultMapper homeworkresultMapper;
 
     @Override
     public int add(Homework homework) {
@@ -50,6 +58,19 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
     @Override
     public int remove(int id) {
+        List<HomeworkResult> list = homeworkresultMapper.selectListById(id);
+        for(HomeworkResult homeworkResult : list){
+            String url = homeworkResult.getFilePath();
+            if (!url.isEmpty()){
+            Path path = Paths.get(url);
+            try {
+                //删除原附件
+                Files.delete(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }}
+            homeworkresultMapper.delete(homeworkResult.getId());
+        }
         return homeworkMapper.deleteById(id);
     }
 }
