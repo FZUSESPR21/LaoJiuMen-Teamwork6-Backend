@@ -16,7 +16,6 @@ import java.util.Map;
 /**
  * 内容清洗
  *
- * @date 2021/06/13
  */
 public class ContentCleanUtil {
     private static final File WORD_FILE = new File("./src/main/webapp/statics/word.txt");
@@ -28,22 +27,17 @@ public class ContentCleanUtil {
         init();
     }
 
-    /**
-     * 清洗内容
-     *
-     * @param content 原文
-     * @return 清洗后内容
-     */
     public static String clean(String content) {
-        if ((content == null) || ("".equals(content)) || (content.length() < 1)) {
-            return content;
-        }
         return XSSClean(String.valueOf(sensitiveClean(content.toCharArray())));
     }
 
     private static String XSSClean(String contents){
-        // TODO: XSS过滤
-        return contents;
+        return contents.replaceAll("<", "& lt;").replaceAll(">", "& gt;")
+            .replaceAll("\\(", "& #40;").replaceAll("\\)", "& #41;")
+            .replaceAll("'", "& #39;")
+            .replaceAll("eval\\((.*)\\)", "")
+            .replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"")
+            .replaceAll("script", "");
     }
 
     private static char[] sensitiveClean(char[] contents) {
