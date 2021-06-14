@@ -19,7 +19,7 @@ import java.util.Map;
  * @date 2021/06/13
  */
 public class ContentCleanUtil {
-    private static final File WORD_FILE = new File("./src/word.txt");
+    private static final File WORD_FILE = new File("./static/word.txt");
     private static final Charset ENCODING = StandardCharsets.UTF_8;
     private static final char LEGAL_CHARACTER = '*';
     private static Map<Character, Object> states = null;
@@ -47,12 +47,59 @@ public class ContentCleanUtil {
     }
 
     private static char[] sensitiveClean(char[] contents) {
-        //TODO: 敏感词过滤
+        int begin = -1;
+        int i = 0;
+        Map<Character, Object> nowMap = states;
+        while (i < contents.length) {
+            Character c = contents[i];
+            if (nowMap.containsKey(c)) {
+                if (begin == -1) {
+                    begin = i;
+                }
+                nowMap = (Map<Character, Object>) nowMap.get(c);
+                if ("1".equals(nowMap.get('~'))) {
+                    for (int j = begin;j <= i;j++) {
+                        contents[j] = LEGAL_CHARACTER;
+                    }
+                    begin = -1;
+                    nowMap = states;
+                }
+            } else {
+                if (begin != -1) {
+                    i = begin;
+                }
+                begin = -1;
+                nowMap = states;
+            }
+            ++i;
+        }
         return contents;
     }
 
     private static void init() {
-        // TODO: 建立DFA
+        String[] words = readMMAP().split("[\r\n, ]+");
+        states = new HashMap<>(words.length << 2);
+        Map<Character, Object> nowMap;
+        for (String word : words) {
+            nowMap = states;
+            for (int i = 0;i < word.length();i++) {
+                Character c = word.charAt(i);
+                Object objectMap = nowMap.get(c);
+
+                if (objectMap != null) {
+                    nowMap = (Map<Character, Object>) objectMap;
+                } else {
+                    Map<Character, Object> newMap = new HashMap<>();
+                    newMap.put('~', "0");
+                    nowMap.put(c, newMap);
+                    nowMap = newMap;
+                }
+
+                if (i == word.length() - 1) {
+                    nowMap.put('~', "1");
+                }
+            }
+        }
     }
 
     private static String readMMAP(){
