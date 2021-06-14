@@ -28,6 +28,9 @@ public class ContentCleanUtil {
     }
 
     public static String clean(String content) {
+        if ((content == null) || ("".equals(content)) || (content.length() < 1)) {
+            return "";
+        }
         return XSSClean(String.valueOf(sensitiveClean(content.toCharArray())));
     }
 
