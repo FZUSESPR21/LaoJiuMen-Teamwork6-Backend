@@ -19,7 +19,7 @@ import java.util.Map;
  * @date 2021/06/13
  */
 public class ContentCleanUtil {
-    private static final File WORD_FILE = new File("./static/word.txt");
+    private static final File WORD_FILE = new File("./src/main/webapp/statics/word.txt");
     private static final Charset ENCODING = StandardCharsets.UTF_8;
     private static final char LEGAL_CHARACTER = '*';
     private static Map<Character, Object> states = null;

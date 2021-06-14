@@ -8,6 +8,7 @@ import team.ljm.secw.entity.Student;
 import team.ljm.secw.mapper.HomeworkMapper;
 import team.ljm.secw.mapper.HomeworkresultMapper;
 import team.ljm.secw.service.IHomeworkService;
+import team.ljm.secw.utils.ContentCleanUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +26,8 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
     @Override
     public int add(Homework homework) {
+        homework.setTitle(ContentCleanUtil.clean(homework.getTitle()));
+        homework.setContent(ContentCleanUtil.clean(homework.getContent()));
         return homeworkMapper.insert(homework);
     }
 
@@ -53,6 +56,8 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
     @Override
     public int modify(Homework homework) {
+        homework.setTitle(ContentCleanUtil.clean(homework.getTitle()));
+        homework.setContent(ContentCleanUtil.clean(homework.getContent()));
         return homeworkMapper.update(homework);
     }
 

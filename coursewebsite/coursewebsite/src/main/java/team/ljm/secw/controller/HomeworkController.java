@@ -19,6 +19,7 @@ import team.ljm.secw.entity.Student;
 import team.ljm.secw.service.IHomeworkService;
 import team.ljm.secw.service.IHomeworkresultService;
 import team.ljm.secw.service.IStudentMgtService;
+import team.ljm.secw.utils.ContentCleanUtil;
 import team.ljm.secw.vo.ResponseVO;
 
 import java.util.ArrayList;
@@ -94,8 +95,10 @@ public class HomeworkController {
     public ResponseVO addHomework(@RequestBody Homework requestHomework){
         if (requestHomework.getTitle().length()>30)return new ResponseVO("200","标题过长");
         if (requestHomework.getContent().length()>1000)return new ResponseVO("200","内容过长");
-        if (requestHomework.getTitle().isEmpty())return new ResponseVO("200","标题不能为空");
-        if (requestHomework.getContent().isEmpty())return new ResponseVO("200","内容不能为空");
+        if ((requestHomework.getTitle() == null) || ("".equals(requestHomework.getTitle())) || (requestHomework.getTitle().length() < 1))
+            return new ResponseVO("200","标题不能为空");
+        if ((requestHomework.getContent()== null) || ("".equals(requestHomework.getContent())) || (requestHomework.getContent().length() < 1))
+            return new ResponseVO("200","内容不能为空");
         homeworkService.add(requestHomework);
         requestHomework.setId(requestHomework.getId());
         List<Student> list = homeworkService.findStudentListByClazzId(requestHomework.getClazzId());
@@ -116,8 +119,10 @@ public class HomeworkController {
     public ResponseVO updateHomework(@RequestBody Homework requestHomework){
         if (requestHomework.getTitle().length()>30)return new ResponseVO("200","标题过长");
         if (requestHomework.getContent().length()>1000)return new ResponseVO("200","内容过长");
-        if (requestHomework.getTitle().isEmpty())return new ResponseVO("200","标题不能为空");
-        if (requestHomework.getContent().isEmpty())return new ResponseVO("200","内容不能为空");
+        if ((requestHomework.getTitle() == null) || ("".equals(requestHomework.getTitle())) || (requestHomework.getTitle().length() < 1))
+            return new ResponseVO("200","标题不能为空");
+        if ((requestHomework.getContent()== null) || ("".equals(requestHomework.getContent())) || (requestHomework.getContent().length() < 1))
+            return new ResponseVO("200","内容不能为空");
         homeworkService.modify(requestHomework);
         return new ResponseVO("200","success");
     }
