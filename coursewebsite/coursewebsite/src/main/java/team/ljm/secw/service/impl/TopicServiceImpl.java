@@ -6,6 +6,7 @@ import team.ljm.secw.entity.Topic;
 
 import team.ljm.secw.mapper.TopicMapper;
 import team.ljm.secw.service.ITopicService;
+import team.ljm.secw.utils.ContentCleanUtil;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class TopicServiceImpl implements ITopicService {
 
     @Override
     public int addTopic(Topic topic) {
+        topic.setTitle(ContentCleanUtil.clean(topic.getTitle()));
+        topic.setContent(ContentCleanUtil.clean(topic.getContent()));
         return topicMapper.insertTopic(topic);
     }
 

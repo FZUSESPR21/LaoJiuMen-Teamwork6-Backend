@@ -16,7 +16,7 @@ public class GlobalExceptionResolver {
     public ResponseVO handleDuplicateKeyException(Exception exception) {
         System.out.println("----------->"+exception.getClass());
         exception.printStackTrace();
-        return new ResponseVO("500", "DuplicateKey");
+        return new ResponseVO("403.1", "重复");
     }
 
     // 捕捉shiro的异常
@@ -26,7 +26,7 @@ public class GlobalExceptionResolver {
     public ResponseVO handleShiroException(Exception exception) {
         System.out.println("----->ShiroException.class");
         exception.printStackTrace();
-        return new ResponseVO("401","Unauthorized!", exception.getMessage());
+        return new ResponseVO("401","您暂无此权限", exception.getMessage());
     }
 
     //@ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -35,7 +35,7 @@ public class GlobalExceptionResolver {
     public ResponseVO handleUnauthorizedException(Exception exception) {
         System.out.println("----->UnauthorizedException.class");
         exception.printStackTrace();
-        return new ResponseVO("401", "Unauthorized!", exception.getMessage());
+        return new ResponseVO("401", "您暂无此权限", exception.getMessage());
     }
 
     @ExceptionHandler(value = {Exception.class})

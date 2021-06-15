@@ -1,5 +1,6 @@
 package team.ljm.secw.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.Logical;
@@ -45,6 +46,9 @@ public class NotificationController {
     @RequestMapping(value = "/teacher/notice/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO addNotice(@RequestBody Notification notification) {
+        if (StrUtil.isBlank(notification.getNotificationName()) || StrUtil.isBlank(notification.getContent())) {
+            return new ResponseVO("403", "标题或内容不能为空");
+        }
         return new ResponseVO("200", "", notificationService.add(notification));
     }
 
@@ -52,6 +56,9 @@ public class NotificationController {
     @RequestMapping(value = "/teacher/notice/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO updateNotice(@RequestBody Notification notification) {
+        if (StrUtil.isBlank(notification.getNotificationName()) || StrUtil.isBlank(notification.getContent())) {
+            return new ResponseVO("403", "标题或内容不能为空");
+        }
         return new ResponseVO("200", "", notificationService.modify(notification));
     }
 

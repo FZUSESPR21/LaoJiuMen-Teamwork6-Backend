@@ -1,5 +1,6 @@
 package team.ljm.secw.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.Logical;
@@ -41,6 +42,9 @@ public class TopicCommentController {
     @RequestMapping(value = "/comment/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO addTopicCommentByTopicId(@RequestBody TopicComment topicComment) {
+        if (StrUtil.isBlank(topicComment.getContent())) {
+            return new ResponseVO("403", "内容不能为空");
+        }
         int successNum = TopicCommentService.addTopicComment(topicComment);
         if (successNum == 1) {
             TopicCommentService.modifyTopicCommentNumByTopicId(topicComment.getTopicId());

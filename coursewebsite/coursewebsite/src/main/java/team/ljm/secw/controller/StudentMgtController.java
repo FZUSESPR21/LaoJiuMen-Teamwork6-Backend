@@ -1,5 +1,6 @@
 package team.ljm.secw.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -42,44 +43,39 @@ public class StudentMgtController {
     @RequiresRoles("teacher")
     @RequestMapping(value = "/teacher/stu_mgt/down")
     //@ResponseBody
-    public void download(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            //String filePath = "src/main/webapp/WEB-INF/file/format/学生名单上传格式.xlsx";
-            String rootPath = request.getSession().getServletContext().getRealPath("/WEB-INF/file/format");
-            String filePath = rootPath + "\\学生名单上传格式.xlsx";
-            System.out.println("!!!!!!!!!!!!!!!!!" + filePath);
-            //封装为完整的文件路径
-            File file = new File(filePath);
-            //如果文件存在的话
-            if (file.exists()) {
-                //获取输入流
-                InputStream bis = new BufferedInputStream(new FileInputStream(file));
-                //假如以中文名下载的话
-                String filename = "学生名单上传格式.xlsx";
-                //转码，免得文件名中文乱码
-                filename = URLEncoder.encode(filename, "UTF-8");
-                //设置文件下载头
-                response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-                //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
-                response.setContentType("multipart/form-data");
-                /*getOutputStream获取子程序的输出流*/
-                BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-                int len = 0;
-                while ((len = bis.read()) != -1) {
-                    out.write(len);
-                    /*将缓冲区中的数据写入到输出流中*/
-                    out.flush();
-                }
-                out.close();
-                //return new ResponseVO("200", "success");
-            } else {
-                //下载的文件不存在
-                //request.setAttribute("errorResult", "文件不存在下载失败！");
-                //return new ResponseVO("500", "文件不存在！");
+    public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //String filePath = "src/main/webapp/WEB-INF/file/format/学生名单上传格式.xlsx";
+        String rootPath = request.getSession().getServletContext().getRealPath("/WEB-INF/file/format");
+        String filePath = rootPath + "\\学生名单上传格式.xlsx";
+        System.out.println("!!!!!!!!!!!!!!!!!" + filePath);
+        //封装为完整的文件路径
+        File file = new File(filePath);
+        //如果文件存在的话
+        if (file.exists()) {
+            //获取输入流
+            InputStream bis = new BufferedInputStream(new FileInputStream(file));
+            //假如以中文名下载的话
+            String filename = "学生名单上传格式.xlsx";
+            //转码，免得文件名中文乱码
+            filename = URLEncoder.encode(filename, "UTF-8");
+            //设置文件下载头
+            response.addHeader("Content-Disposition", "attachment;filename=" + filename);
+            //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
+            response.setContentType("multipart/form-data");
+            /*getOutputStream获取子程序的输出流*/
+            BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+            int len = 0;
+            while ((len = bis.read()) != -1) {
+                out.write(len);
+                /*将缓冲区中的数据写入到输出流中*/
+                out.flush();
             }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            //return new ResponseVO("500", "error");
+            out.close();
+            //return new ResponseVO("200", "success");
+        } else {
+            //下载的文件不存在
+            //request.setAttribute("errorResult", "文件不存在下载失败！");
+            //return new ResponseVO("500", "文件不存在！");
         }
     }
 
@@ -88,7 +84,6 @@ public class StudentMgtController {
     @ResponseBody
     public ResponseVO showStudentListByClazzId(@RequestParam(value = "clazzId") Integer clazzId,
                                                @RequestParam(value = "pn", defaultValue = "1") Integer pn) {
-
         PageHelper.startPage(pn, 5);
         List<Student> studentList = studentMgtService.findStudentListByClazzId(clazzId);
         PageInfo<Student> pageInfo = new PageInfo<>(studentList, 5);
@@ -99,6 +94,9 @@ public class StudentMgtController {
     @RequestMapping(value = "/teacher/stu_mgt/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO addStudent(@RequestBody Student student) {
+        if (StrUtil.isBlank(student.getStudentName()) || StrUtil.isBlank(student.getAccount()) || StrUtil.isBlank(student.getEmail())) {
+            return new ResponseVO("403", "学号、姓名或邮箱不能为空");
+        }
         student.setPwd("123456");
         return new ResponseVO("200", "", studentMgtService.add(student));
     }
@@ -107,6 +105,9 @@ public class StudentMgtController {
     @RequestMapping(value = "/teacher/stu_mgt/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO updateStudent(@RequestBody Student student) {
+        if (StrUtil.isBlank(student.getStudentName()) || StrUtil.isBlank(student.getAccount()) || StrUtil.isBlank(student.getEmail())) {
+            return new ResponseVO("403", "学号、姓名或邮箱不能为空");
+        }
         return new ResponseVO("200", "", studentMgtService.modify(student));
     }
 
@@ -129,11 +130,14 @@ public class StudentMgtController {
     @RequestMapping(value = "/teacher/cls/add")
     @ResponseBody
     public ResponseVO addClazz(@RequestBody Clazz clazz) {
+        if (StrUtil.isBlank(clazz.getClazzName())) {
+            return new ResponseVO("403", "班级名字不能为空");
+        }
         int num = clazzService.add(clazz);
         if (num == 1) {
             return new ResponseVO("200", String.valueOf(num), clazzService.findClazzNameListByTeacherId(clazz.getTeacherId()));
         } else {
-            return new ResponseVO("500", String.valueOf(num));
+            return new ResponseVO("403", String.valueOf(num));
         }
     }
 

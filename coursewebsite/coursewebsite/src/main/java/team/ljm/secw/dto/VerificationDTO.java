@@ -7,7 +7,6 @@ public class VerificationDTO {
     private String email;
     private String captcha;
     private String pwd;
-    private String sessionId;
 
     @Override
     public String toString() {
@@ -17,16 +16,7 @@ public class VerificationDTO {
                 ", email='" + email + '\'' +
                 ", captcha='" + captcha + '\'' +
                 ", pwd='" + pwd + '\'' +
-                ", sessionId='" + sessionId + '\'' +
                 '}';
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public String getCaptcha() {

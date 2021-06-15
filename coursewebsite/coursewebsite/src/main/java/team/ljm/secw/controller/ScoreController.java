@@ -1,8 +1,10 @@
 package team.ljm.secw.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -168,8 +170,8 @@ public class ScoreController {
         return scoreService.readExcelFile(file);
     }
 
-    @RequiresRoles("teacher")
-    @RequestMapping(value = "/teacher/score/rules/search", method = RequestMethod.GET)
+    @RequiresRoles(value={"student","teacher"}, logical = Logical.OR)
+    @RequestMapping(value = "/score/rules/search", method = RequestMethod.GET)
     @ResponseBody
     public ResponseVO showScoreRulesByClazzId(@RequestParam("cid") int cid) {
         return new ResponseVO("200", "", clazzService.findScoreRuleByClazzId(cid));
@@ -195,5 +197,7 @@ public class ScoreController {
     public ResponseVO showScore(@RequestParam("sid") int sid) {
         return new ResponseVO("200", "", scoreService.findScoreByStudentId(sid));
     }
+
+
 
 }

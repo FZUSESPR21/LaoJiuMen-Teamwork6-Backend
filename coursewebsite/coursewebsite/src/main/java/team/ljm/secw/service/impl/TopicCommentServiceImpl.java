@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import team.ljm.secw.entity.TopicComment;
 import team.ljm.secw.mapper.TopicCommentMapper;
 import team.ljm.secw.service.ITopicCommentService;
+import team.ljm.secw.utils.ContentCleanUtil;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class TopicCommentServiceImpl implements ITopicCommentService {
 
     @Override
     public int addTopicComment(TopicComment topicComment) {
+        topicComment.setContent(ContentCleanUtil.clean(topicComment.getContent()));
         return topicCommentMapper.insertTopicComment(topicComment);
     }
 

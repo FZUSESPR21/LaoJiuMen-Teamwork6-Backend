@@ -1,5 +1,6 @@
 package team.ljm.secw.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.Logical;
@@ -37,6 +38,9 @@ public class TopicController {
     @RequestMapping(value = "/topic/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseVO addTopic(@RequestBody Topic topic) {
+        if (StrUtil.isBlank(topic.getTitle()) || StrUtil.isBlank(topic.getContent())) {
+            return new ResponseVO("403", "标题或内容不能为空");
+        }
         return new ResponseVO("200","", TopicService.addTopic(topic));
     }
 

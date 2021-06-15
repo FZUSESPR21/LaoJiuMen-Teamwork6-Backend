@@ -1,5 +1,6 @@
 package team.ljm.secw.controller;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,9 @@ public class LoginController {
 //            e.printStackTrace();
 //            return new ResponseVO("401", "账号或密码错误！");
 //        }
+        if (StrUtil.isBlank(loginDTO.getAccount()) || StrUtil.isBlank(loginDTO.getPassword())) {
+            return new ResponseVO("403", "账号或密码不能为空");
+        }
         try {
             if (loginDTO.getType().equals("0")) {
                 Student student = loginService.findStudentByAccount(loginDTO.getAccount());
@@ -51,7 +55,7 @@ public class LoginController {
                     s.setClazzId(student.getClazzId());
                     return new ResponseVO("200", JwtUtil.sign(loginDTO.getType(), loginDTO.getAccount(), student.getPwd()), s);
                 } else {
-                    return new ResponseVO("401", "账号或密码错误！");
+                    return new ResponseVO("403", "账号或密码错误！");
                 }
             } else {
                 Teacher teacher = loginService.findTeacherByAccount(loginDTO.getAccount());
@@ -60,19 +64,19 @@ public class LoginController {
                             clazzService.findClazzNameListByTeacherId(teacher.getId()));
                     return new ResponseVO("200", JwtUtil.sign(loginDTO.getType(), loginDTO.getAccount(), teacher.getPwd()), teacherDTO);
                 } else {
-                    return new ResponseVO("401", "账号或密码错误！");
+                    return new ResponseVO("403", "账号或密码错误！");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseVO("401", e.getMessage());
+            return new ResponseVO("403", e.getMessage());
         }
     }
 
     @RequestMapping(value = "/401")
     @ResponseBody
     public ResponseVO unauthorized() {
-        return new ResponseVO("401", "Unauthorized!", null);
+        return new ResponseVO("401", "您暂无此权限", null);
     }
 
 }
