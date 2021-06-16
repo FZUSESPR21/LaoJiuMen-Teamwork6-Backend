@@ -134,7 +134,7 @@ public class HomeworkresultController {
             try {
                 String originalFileName = file.getOriginalFilename();
                 String fileUrl = "";
-                fileUrl = "C:/webcoursefile/homework/" + requestHomeworkResult.getHomeworkId() + "/" + requestHomeworkResult.getStudentId() + "/" + originalFileName;
+                fileUrl = "\\WEB-INF\\CourseWebsiteFile\\homework\\" + requestHomeworkResult.getHomeworkId() + "\\" + requestHomeworkResult.getStudentId() + "\\" + originalFileName;
                 fileUrl = request.getSession().getServletContext().getRealPath(fileUrl);
                 Date date = new Date();
                 requestHomeworkResult.setSubmittedAt(date);

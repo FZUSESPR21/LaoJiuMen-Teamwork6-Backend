@@ -39,19 +39,19 @@ public class ResourceController {
     @RequiresRoles("teacher")
     @RequestMapping("/teacher/resource/upload")
     @ResponseBody
-    public ResponseVO upload(@ModelAttribute ResourceDTO requestResource, HttpServletRequest request, Model model) {
-        try {
+    public ResponseVO upload(@ModelAttribute ResourceDTO requestResource, HttpServletRequest request) throws IOException {
+//        try {
             MultipartFile file = requestResource.getFile();
             String originalFileName = file.getOriginalFilename();
             String fileUrl = "";
             if (requestResource.getType() == 0) {
-                fileUrl = "C:\\webcoursefile\\resource\\" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
+                fileUrl = "\\WEB-INF\\CourseWebsiteFile\\resource\\" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
             }
             else if (requestResource.getType() == 1) {
-                fileUrl = "C:\\webcoursefile\\other\\" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
+                fileUrl = "\\WEB-INF\\CourseWebsiteFile\\other\\"+ requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
             }
             else if (requestResource.getType() == 2) {
-                fileUrl = "C:\\webcoursefile\\other\\学习计划" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
+                fileUrl = "\\WEB-INF\\CourseWebsiteFile\\other\\学习计划\\" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
             }
             fileUrl = request.getSession().getServletContext().getRealPath(fileUrl);
             //向url地址存储文件
@@ -67,13 +67,16 @@ public class ResourceController {
             resource.setDownloads(0);
             Resource resource1 = resourceService.findByName(resource);
             System.out.println(resource1);
-            if (resource1==null)
-            resourceService.add(resource);
-            else resourceService.modifyResource(resource);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+            if (resource1==null) {
+                resourceService.add(resource);
+            }
+            else {
+                resourceService.modifyResource(resource);
+            }
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//        }
         return new ResponseVO("200","success");
     }
 
@@ -95,7 +98,7 @@ public class ResourceController {
             MultipartFile file = requestResource.getFile();
             String originalFileName = file.getOriginalFilename();
             String fileUrl = "";
-            fileUrl = "C:\\webcoursefile\\other\\学习计划\\" + requestResource.getTeacherId() +"\\" + requestResource.getClazzId() + "\\" + originalFileName;
+            fileUrl = "\\WEB-INF\\CourseWebsiteFile\\other\\学习计划\\" + requestResource.getTeacherId() +"\\" + requestResource.getClazzId() + "\\" + originalFileName;
             fileUrl = request.getSession().getServletContext().getRealPath(fileUrl);
             //向url地址存储文件
             FileUtil.writeFileToUrl(file, fileUrl);
