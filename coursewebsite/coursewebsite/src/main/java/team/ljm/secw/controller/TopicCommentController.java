@@ -8,6 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import team.ljm.secw.dto.TopicCommentDTO;
 import team.ljm.secw.entity.TopicComment;
 import team.ljm.secw.service.ITopicCommentService;
 import team.ljm.secw.vo.ResponseVO;
@@ -26,8 +27,8 @@ public class TopicCommentController {
     public ResponseVO showTopicCommentListByTopicId(@RequestParam("topicId") String topicId,
                                                     @RequestParam(value = "pn", defaultValue = "1") Integer pn) {
         PageHelper.startPage(pn, 5);
-        List<TopicComment> topicCommentList = TopicCommentService.findTopicCommentListByTopicId(topicId);
-        PageInfo<TopicComment> pageInfo = new PageInfo<>(topicCommentList, 5);
+        List<TopicCommentDTO> topicCommentList = TopicCommentService.findTopicCommentListByTopicId(topicId);
+        PageInfo<TopicCommentDTO> pageInfo = new PageInfo<>(topicCommentList, 5);
         return new ResponseVO("200", "", pageInfo);
     }
 

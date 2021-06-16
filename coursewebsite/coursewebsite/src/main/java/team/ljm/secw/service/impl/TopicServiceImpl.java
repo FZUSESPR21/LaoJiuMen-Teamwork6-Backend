@@ -2,6 +2,7 @@ package team.ljm.secw.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.ljm.secw.dto.TopicDTO;
 import team.ljm.secw.entity.Topic;
 
 import team.ljm.secw.mapper.TopicMapper;
@@ -17,7 +18,7 @@ public class TopicServiceImpl implements ITopicService {
     private TopicMapper topicMapper;
 
     @Override
-    public List<Topic> findTopicList() {
+    public List<TopicDTO> findTopicList() {
         return topicMapper.selectTopicList();
     }
 
@@ -29,7 +30,7 @@ public class TopicServiceImpl implements ITopicService {
     }
 
     @Override
-    public List<Topic> findMyTopicList(String account) {
+    public List<TopicDTO> findMyTopicList(String account) {
         return topicMapper.selectMyTopicList(account);
     }
 
@@ -39,13 +40,13 @@ public class TopicServiceImpl implements ITopicService {
     }
 
     @Override
-    public List<Topic> findTopicListByTitle(String title) {
-        return topicMapper.selectTopicListByTitle("'%" + title + "%'");
+    public List<TopicDTO> findTopicListByTitle(String title) {
+        return topicMapper.selectTopicListByTitle("%" + title + "%");
     }
 
     @Override
-    public List<Topic> findTopicListByAccount(String account) {
-        return topicMapper.selectTopicListByAccount(account);
+    public List<TopicDTO> findTopicListByName(String name) {
+        return topicMapper.selectTopicListByName("%" + name + "%");
     }
 
 }

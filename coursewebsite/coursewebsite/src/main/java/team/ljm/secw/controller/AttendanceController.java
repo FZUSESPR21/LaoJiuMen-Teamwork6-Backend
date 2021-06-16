@@ -1,22 +1,19 @@
 package team.ljm.secw.controller;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.ljm.secw.dto.AttendanceDTO;
-import team.ljm.secw.entity.Attendance;
 import team.ljm.secw.entity.AttendanceResult;
 import team.ljm.secw.entity.Student;
-import team.ljm.secw.entity.StudentVo;
-import team.ljm.secw.service.AttendanceService;
+import team.ljm.secw.service.IAttendanceService;
 import team.ljm.secw.vo.ResponseVO;
 
-import java.util.List;
 
-@Controller
-@RequestMapping("/attendance")
 /**
  * /all?clazzId= &studentId=,学生签到界面
  * /insert,不要管
@@ -26,42 +23,59 @@ import java.util.List;
  * /release?attendanceName=  &endAt(结束时间) &issuer=  &clazzId=,教师发布签到
  * /updateTime?id=   &endAt=   ,教师更改签到时间
  */
+
+@Controller
 public class AttendanceController {
+
     @Autowired
-    private AttendanceService attendanceService;
-    @RequestMapping("/all")
+    private IAttendanceService attendanceService;
+
+    @RequiresRoles("student")
+    @RequestMapping("/attendance/all")
     @ResponseBody
-    public ResponseVO getAll(@RequestBody  Student student){
-        return new ResponseVO("200","",this.attendanceService.findAllAttendance(student));
+    public ResponseVO getAll(@RequestBody Student student){
+        return new ResponseVO("200","", attendanceService.findAllAttendance(student));
     }
-    @RequestMapping("/insert")
+
+    @RequiresRoles("teacher")
+    @RequestMapping("/attendance/insert")
     @ResponseBody
     public ResponseVO insert(@RequestBody AttendanceResult attendanceResult){
-        return new ResponseVO("200","",this.attendanceService.insertStuAttendance(attendanceResult));
+        return new ResponseVO("200","", attendanceService.insertStuAttendance(attendanceResult));
     }
-    @RequestMapping("/teacherAll")
+
+    @RequiresRoles("teacher")
+    @RequestMapping("/attendance/teacherAll")
     @ResponseBody
-    public ResponseVO teacherAll(@RequestBody Integer clazzId){
-        return new ResponseVO("200","",this.attendanceService.findTeacherAttendance(clazzId));
+    public ResponseVO teacherAll(@RequestParam(value = "clazzId") Integer clazzId){
+        return new ResponseVO("200","", attendanceService.findTeacherAttendance(clazzId));
     }
-    @RequestMapping("/stuUpdate")
+
+    @RequiresRoles("student")
+    @RequestMapping("/attendance/stuUpdate")
     @ResponseBody
     public ResponseVO stuUpdate(@RequestBody AttendanceResult attendanceResult){
-        return new ResponseVO("200","",this.attendanceService.updateResult(attendanceResult));
+        return new ResponseVO("200","", attendanceService.updateResult(attendanceResult));
     }
-    @RequestMapping("/stuList")
+
+    @RequiresRoles("teacher")
+    @RequestMapping("/attendance/stuList")
     @ResponseBody
     public ResponseVO AttendenceList(@RequestBody Integer attendanceId){
-        return new ResponseVO("200","",attendanceService.findStuResult(attendanceId));
+        return new ResponseVO("200","", attendanceService.findStuResult(attendanceId));
     }
-    @RequestMapping("/release")
+
+    @RequiresRoles("teacher")
+    @RequestMapping("/attendance/release")
     @ResponseBody
     public ResponseVO release(@RequestBody AttendanceDTO attendance){
-        return new ResponseVO("200","",attendanceService.releaseAttendance(attendance));
+        return new ResponseVO("200","", attendanceService.releaseAttendance(attendance));
     }
-    @RequestMapping("/updateTime")
+
+    @RequiresRoles("teacher")
+    @RequestMapping("/attendance/updateTime")
     @ResponseBody
     public ResponseVO updateTime(@RequestBody AttendanceDTO attendance){
-        return new ResponseVO("200","",attendanceService.updateEndAt(attendance));
+        return new ResponseVO("200","", attendanceService.updateEndAt(attendance));
     }
 }

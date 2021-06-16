@@ -5,9 +5,9 @@
 
 <mapper namespace="team.ljm.secw.mapper.TopicMapper">
 
-    <select id="selectTopicList" resultType="team.ljm.secw.entity.Topic">
-        select id, account, title, content, comment_num, released_at
-        from t_topic
+    <select id="selectTopicList" resultType="team.ljm.secw.dto.TopicDTO">
+        select t.id, t.account, t.title, t.content, t.comment_num, t.released_at, COALESCE(stu.student_name, tch.teacher_name) name
+        from t_topic AS t LEFT JOIN t_teacher AS tch ON t.account = tch.account LEFT JOIN t_student AS stu ON t.account = stu.account
         order by released_at DESC
     </select>
 
@@ -16,10 +16,14 @@
         values (#{account}, #{title}, #{content})
     </insert>
 
-    <select id="selectMyTopicList" resultType="team.ljm.secw.entity.Topic">
-        select id, account, title, content, comment_num, released_at
-        from t_topic
-        where account = #{account}
+    <select id="selectMyTopicList" resultType="team.ljm.secw.dto.TopicDTO">
+        select t.id, t.account, t.title, t.content, t.comment_num, t.released_at, tmp.`name`
+        from t_topic AS t LEFT JOIN (select account, teacher_name `name`
+                                     from t_teacher
+                                     UNION ALL
+                                     select account, student_name `name`
+                                     from t_student) AS tmp ON t.account = tmp.account
+        where t.account = #{account}
         order by released_at DESC
     </select>
 
@@ -28,17 +32,25 @@
         where id = #{id}
     </delete>
 
-    <select id="selectTopicListByTitle" resultType="team.ljm.secw.entity.Topic">
-        select id, account, title, content, comment_num, released_at
-        from t_topic
-        where title like #{title}
+    <select id="selectTopicListByTitle" resultType="team.ljm.secw.dto.TopicDTO">
+        select t.id, t.account, t.title, t.content, t.comment_num, t.released_at, tmp.`name`
+        from t_topic AS t LEFT JOIN (select account, teacher_name `name`
+                                     from t_teacher
+                                     UNION ALL
+                                     select account, student_name `name`
+                                     from t_student) AS tmp ON t.account = tmp.account
+        where t.title like #{title}
         order by released_at DESC
     </select>
 
-    <select id="selectTopicListByAccount" resultType="team.ljm.secw.entity.Topic">
-        select id, account, title, content, comment_num, released_at
-        from t_topic
-        where account = #{account}
+    <select id="selectTopicListByName" resultType="team.ljm.secw.dto.TopicDTO">
+        select t.id, t.account, t.title, t.content, t.comment_num, t.released_at, tmp.`name`
+        from t_topic AS t LEFT JOIN (select account, teacher_name `name`
+                                     from t_teacher
+                                     UNION ALL
+                                     select account, student_name `name`
+                                     from t_student) AS tmp ON t.account = tmp.account
+        WHERE name like #{name}
         order by released_at DESC
     </select>
 

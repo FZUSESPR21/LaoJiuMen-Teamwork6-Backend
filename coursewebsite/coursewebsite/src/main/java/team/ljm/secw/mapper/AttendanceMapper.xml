@@ -5,10 +5,10 @@
 
 <mapper namespace="team.ljm.secw.mapper.AttendanceMapper">
 
-    <select id="findAllAttendance" resultType="AttendanceDTO" parameterType="Integer">
+    <select id="findAllAttendance" resultType="team.ljm.secw.dto.AttendanceDTO" parameterType="Integer">
         select * from t_attendance a where clazz_id=#{clazzId}
     </select>
-    <select id="findResult" parameterType="Integer" resultType="AttendanceResult">
+    <select id="findResult" parameterType="Integer" resultType="team.ljm.secw.entity.AttendanceResult">
         select * from t_attendance_result where student_id=#{studentid}
     </select>
     <!--<resultMap id="AttendanceResult" type="Attendance">
@@ -21,23 +21,23 @@
         </association>
 
     </resultMap>-->
-    <insert id="insertStuAttendance" parameterType="AttendanceResult">
+    <insert id="insertStuAttendance" parameterType="team.ljm.secw.entity.AttendanceResult">
         insert into t_attendance_result(attendance_id, student_id) values(#{attendanceId},#{studentId})
     </insert>
-    <update id="updateResult" parameterType="AttendanceResult">
+    <update id="updateResult" parameterType="team.ljm.secw.entity.AttendanceResult">
         update t_attendance_result set attended_at=#{attendedAt} where attendance_id=#{attendanceId} and student_id=#{studentId}
     </update>
-    <select id="findStuResult" parameterType="Integer" resultType="AttendanceResult">
+    <select id="findStuResult" parameterType="Integer" resultType="team.ljm.secw.entity.AttendanceResult">
         select *
         from t_attendance_result where attendance_id=#{attendanceId};
     </select>
-    <select id="findAllStu" parameterType="Integer" resultType="Student">
+    <select id="findAllStu" parameterType="Integer" resultType="team.ljm.secw.entity.Student">
         select * from t_student where clazz_id=#{clazzId}
     </select>
-    <insert id="insertAttendance" parameterType="AttendanceDTO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertAttendance" parameterType="team.ljm.secw.dto.AttendanceDTO" useGeneratedKeys="true" keyProperty="id">
         insert into t_attendance(attendance_name, start_at, end_at, issuer, clazz_id) values(#{attendanceName},#{startAt},#{endAt},#{issuer},#{clazzId})
     </insert>
-    <update id="updateEndAt" parameterType="AttendanceDTO">
+    <update id="updateEndAt" parameterType="team.ljm.secw.dto.AttendanceDTO">
         update t_attendance set end_at=#{endAt} where id=#{id}
     </update>
 

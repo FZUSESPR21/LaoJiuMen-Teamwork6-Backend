@@ -2,6 +2,7 @@ package team.ljm.secw.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.ljm.secw.dto.TopicCommentDTO;
 import team.ljm.secw.entity.TopicComment;
 import team.ljm.secw.mapper.TopicCommentMapper;
 import team.ljm.secw.service.ITopicCommentService;
@@ -16,7 +17,7 @@ public class TopicCommentServiceImpl implements ITopicCommentService {
     private TopicCommentMapper topicCommentMapper;
 
     @Override
-    public List<TopicComment> findTopicCommentListByTopicId(String topicId) {
+    public List<TopicCommentDTO> findTopicCommentListByTopicId(String topicId) {
         return topicCommentMapper.selectTopicCommentListByTopicId(topicId);
     }
 

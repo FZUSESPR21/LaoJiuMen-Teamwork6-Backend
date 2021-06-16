@@ -8,6 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import team.ljm.secw.dto.TopicDTO;
 import team.ljm.secw.entity.Topic;
 import team.ljm.secw.service.ITopicCommentService;
 import team.ljm.secw.service.ITopicService;
@@ -29,8 +30,8 @@ public class TopicController {
     @ResponseBody
     public ResponseVO showTopicList(@RequestParam(value = "pn", defaultValue = "1") Integer pn) {
         PageHelper.startPage(pn, 5);
-        List<Topic> topicList = TopicService.findTopicList();
-        PageInfo<Topic> pageInfo = new PageInfo<>(topicList, 5);
+        List<TopicDTO> topicList = TopicService.findTopicList();
+        PageInfo<TopicDTO> pageInfo = new PageInfo<>(topicList, 5);
         return new ResponseVO("200", "", pageInfo);
     }
 
@@ -50,8 +51,8 @@ public class TopicController {
     public ResponseVO showMyTopicList(@RequestParam("account") String account,
                                       @RequestParam(value = "pn", defaultValue = "1") Integer pn) {
         PageHelper.startPage(pn, 5);
-        List<Topic> topicList = TopicService.findMyTopicList(account);
-        PageInfo<Topic> pageInfo = new PageInfo<>(topicList, 5);
+        List<TopicDTO> topicList = TopicService.findMyTopicList(account);
+        PageInfo<TopicDTO> pageInfo = new PageInfo<>(topicList, 5);
         return new ResponseVO("200", "", pageInfo);
     }
 
@@ -72,19 +73,19 @@ public class TopicController {
     public ResponseVO searchTopicListByTitle(@RequestParam("title") String title,
                                              @RequestParam(value = "pn", defaultValue = "1") Integer pn) {
         PageHelper.startPage(pn, 5);
-        List<Topic> topicList = TopicService.findTopicListByTitle(title);
-        PageInfo<Topic> pageInfo = new PageInfo<>(topicList, 5);
+        List<TopicDTO> topicList = TopicService.findTopicListByTitle(title);
+        PageInfo<TopicDTO> pageInfo = new PageInfo<>(topicList, 5);
         return new ResponseVO("200","", pageInfo);
     }
 
     @RequiresRoles(value={"student","teacher"}, logical = Logical.OR)
-    @RequestMapping(value = "/topic/srh_a", method = RequestMethod.GET)
+    @RequestMapping(value = "/topic/srh_n", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseVO searchTopicListByAccount(@RequestParam("account") String account,
+    public ResponseVO searchTopicListByName(@RequestParam("name") String name,
                                                @RequestParam(value = "pn", defaultValue = "1") Integer pn) {
         PageHelper.startPage(pn, 5);
-        List<Topic> topicList = TopicService.findTopicListByAccount(account);
-        PageInfo<Topic> pageInfo = new PageInfo<>(topicList, 5);
+        List<TopicDTO> topicList = TopicService.findTopicListByName(name);
+        PageInfo<TopicDTO> pageInfo = new PageInfo<>(topicList, 5);
         return new ResponseVO("200","", pageInfo);
     }
 

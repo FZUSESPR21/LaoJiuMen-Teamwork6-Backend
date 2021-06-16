@@ -2,23 +2,22 @@ package team.ljm.secw.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import team.ljm.secw.dto.AttendanceDTO;
-import team.ljm.secw.entity.Attendance;
 import team.ljm.secw.entity.AttendanceResult;
 import team.ljm.secw.entity.Student;
-import team.ljm.secw.entity.StudentVo;
 import team.ljm.secw.mapper.AttendanceMapper;
-import team.ljm.secw.service.AttendanceService;
+import team.ljm.secw.service.IAttendanceService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-@Service
-@Transactional
-public class AttendanceServiceImpl implements AttendanceService {
+
+@Service("AttendanceService")
+public class AttendanceServiceImpl implements IAttendanceService {
+
     @Autowired
     private AttendanceMapper attendanceMapper;
+
     @Override
     public List<AttendanceDTO> findAllAttendance(Student student) {
         System.out.println(student);

@@ -236,4 +236,12 @@ public class ResourceController {
         }
         //return new ResponseVO("200","success");
     }
+
+    @RequiresRoles("teacher")
+    @RequestMapping(value = "/teacher/resource/upload_plan", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseVO uploadPlan(@RequestParam("planMessage") String planMessage){
+        System.out.println(planMessage);
+        return new ResponseVO("200","success", planMessage);
+    }
 }

@@ -5,11 +5,15 @@
 
 <mapper namespace="team.ljm.secw.mapper.TopicCommentMapper">
 
-    <select id="selectTopicCommentListByTopicId" resultType="team.ljm.secw.entity.TopicComment">
-        select id, account, content, released_at
-        from t_topic_comment
-        where topic_id = #{topicId}
-        order by released_at DESC
+    <select id="selectTopicCommentListByTopicId" resultType="team.ljm.secw.dto.TopicCommentDTO">
+        select c.id, c.account, c.content, c.released_at, tmp.`name`
+        from t_topic_comment AS c LEFT JOIN (select account, teacher_name `name`
+                                     from t_teacher
+                                     UNION ALL
+                                     select account, student_name `name`
+                                     from t_student) AS tmp ON c.account = tmp.account
+        where c.topic_id = #{topicId}
+        order by c.released_at DESC
     </select>
 
     <delete id="deleteTopicCommentById">

@@ -1,21 +1,22 @@
 package team.ljm.secw.service;
 
+import team.ljm.secw.dto.TopicDTO;
 import team.ljm.secw.entity.Topic;
 
 import java.util.List;
 
 public interface ITopicService {
 
-    List<Topic> findTopicList();
+    List<TopicDTO> findTopicList();
 
     int addTopic(Topic topic);
 
-    List<Topic> findMyTopicList(String account);
+    List<TopicDTO> findMyTopicList(String account);
 
     int removeTopicById(int id);
 
-    List<Topic> findTopicListByTitle(String title);
+    List<TopicDTO> findTopicListByTitle(String title);
 
-    List<Topic> findTopicListByAccount(String account);
+    List<TopicDTO> findTopicListByName(String account);
 
 }

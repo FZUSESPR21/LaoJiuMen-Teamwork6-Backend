@@ -1,21 +1,22 @@
 package team.ljm.secw.mapper;
 
+import team.ljm.secw.dto.TopicDTO;
 import team.ljm.secw.entity.Topic;
 
 import java.util.List;
 
 public interface TopicMapper {
 
-    List<Topic> selectTopicList();
+    List<TopicDTO> selectTopicList();
 
     int insertTopic(Topic topic);
 
-    List<Topic> selectMyTopicList(String account);
+    List<TopicDTO> selectMyTopicList(String account);
 
     int deleteTopicById(int id);
 
-    List<Topic> selectTopicListByTitle(String title);
+    List<TopicDTO> selectTopicListByTitle(String title);
 
-    List<Topic> selectTopicListByAccount(String account);
+    List<TopicDTO> selectTopicListByName(String name);
 
 }
