@@ -44,12 +44,15 @@ public class ResourceController {
             MultipartFile file = requestResource.getFile();
             String originalFileName = file.getOriginalFilename();
             String fileUrl = "";
-            if (requestResource.getType()==0)
-                fileUrl = "C:/webcoursefile/resource/" + requestResource.getTeacherId() +"/" + requestResource.getClazzId() + "/" + originalFileName;
-            else if (requestResource.getType()==1)
-                fileUrl = "C:/webcoursefile/other/" + requestResource.getTeacherId() +"/" + requestResource.getClazzId() + "/" + originalFileName;
-            else if (requestResource.getType()==2)
-                fileUrl = "C:/webcoursefile/other/学习计划/" + requestResource.getTeacherId() +"/" + requestResource.getClazzId() + "/" + originalFileName;
+            if (requestResource.getType() == 0) {
+                fileUrl = "C:\\webcoursefile\\resource\\" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
+            }
+            else if (requestResource.getType() == 1) {
+                fileUrl = "C:\\webcoursefile\\other\\" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
+            }
+            else if (requestResource.getType() == 2) {
+                fileUrl = "C:\\webcoursefile\\other\\学习计划" + requestResource.getTeacherId() + "\\" + requestResource.getClazzId() + "\\" + originalFileName;
+            }
             fileUrl = request.getSession().getServletContext().getRealPath(fileUrl);
             //向url地址存储文件
             FileUtil.writeFileToUrl(file, fileUrl);
@@ -92,7 +95,7 @@ public class ResourceController {
             MultipartFile file = requestResource.getFile();
             String originalFileName = file.getOriginalFilename();
             String fileUrl = "";
-            fileUrl = "C:/webcoursefile/other/学习计划/" + requestResource.getTeacherId() +"/" + requestResource.getClazzId() + "/" + originalFileName;
+            fileUrl = "C:\\webcoursefile\\other\\学习计划\\" + requestResource.getTeacherId() +"\\" + requestResource.getClazzId() + "\\" + originalFileName;
             fileUrl = request.getSession().getServletContext().getRealPath(fileUrl);
             //向url地址存储文件
             FileUtil.writeFileToUrl(file, fileUrl);
