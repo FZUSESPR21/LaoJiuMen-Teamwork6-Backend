@@ -6,6 +6,7 @@ public class Teacher {
     private String teacherName;
     private String pwd;
     private String email;
+    private String information;
 
     @Override
     public String toString() {
@@ -15,7 +16,16 @@ public class Teacher {
                 ", teacherName='" + teacherName + '\'' +
                 ", pwd='" + pwd + '\'' +
                 ", email='" + email + '\'' +
+                ", information='" + information + '\'' +
                 '}';
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
     }
 
     public int getId() {

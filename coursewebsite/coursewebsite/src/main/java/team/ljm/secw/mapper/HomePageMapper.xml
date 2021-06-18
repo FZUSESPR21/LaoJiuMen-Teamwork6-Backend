@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.ljm.secw.mapper.HomePageMapper">
+
+    <select id="selectTeacherInformation" resultType="java.lang.String">
+        SELECT t.information
+        FROM t_teacher AS t LEFT JOIN t_clazz AS c ON t.id = c.teacher_id
+        WHERE c.id = #{clazzId}
+    </select>
+
+    <update id="updateTeacherInformation" parameterType="team.ljm.secw.entity.Teacher">
+        UPDATE t_teacher
+        SET information = #{information}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
